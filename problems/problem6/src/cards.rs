@@ -46,7 +46,14 @@ impl fmt::Display for Suit {
         // It should output one of these unicode strings
         // as appropriate for the suit: "♠" "♥" "♦" "♣"
         // see: https://doc.rust-lang.org/std/fmt/trait.Display.html
-        write!(f, "{}", "♠")
+        use Suit::*;
+        let s = match self {
+            Spades   => "♠",
+            Hearts   => "♥",
+            Diamonds => "♦",
+            Clubs    => "♣",
+        };
+        write!(f, "{}", s)
     }
 }
 
@@ -77,7 +84,23 @@ impl fmt::Display for Rank {
         // It should output one of these string values, as appropriate
         // for the given rank:  2 3 4 5 6 7 8 9 10 J Q K A
         // see: https://doc.rust-lang.org/std/fmt/trait.Display.html
-        write!(f, "{}", "A")
+        use Rank::*;
+        let s = match self {
+            Two     => "2",
+            Three   => "3",
+            Four    => "4",
+            Five    => "5",
+            Six     => "6",
+            Seven   => "7",
+            Eight   => "8",
+            Nine    => "9",
+            Ten     => "10",
+            Jack    => "J",
+            Queen   => "Q",
+            King    => "K",
+            Ace     => "A",
+        };
+        write!(f, "{}", s)
     }
 }
 
@@ -118,11 +141,25 @@ impl Deck {
         // *** IMPLEMENT THIS METHOD ***
         // Given an empty vector in self.cards, populate it with all 52 of the
         // available unique cards.
+        let suits = [Suit::Spades, Suit::Hearts, Suit::Diamonds, Suit::Clubs];
+        let ranks = [Rank::Ace, Rank::Two, Rank::Three, Rank::Four, Rank::Five,
+                     Rank::Six, Rank::Seven, Rank::Eight, Rank::Nine, Rank::Ten,
+                     Rank::Jack, Rank::Queen, Rank::King];
+        for &suit in suits.iter() {
+            for &rank in ranks.iter() {
+                self.cards.push(Card { suit, rank })
+            }
+        }
     }
 
     pub fn shuffle(&mut self) {
         // *** IMPLEMENT THIS METHOD ***
         // Fully randomize the order of the cards in the self.cards vector.
+        let count = self.cards.len();
+        for i in 0..count {
+            let j = rand::thread_rng().gen_range(0, count);
+            self.cards.swap(i, j);
+        }
     }
 }
 

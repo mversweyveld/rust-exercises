@@ -39,7 +39,26 @@ impl Hand {
         // Note that you can leverage the underlying rank.value() method of
         // the cards, but you'll need some special handling to decide when
         // to count an ace as 1 vs. 11
-        0
+        let mut total:u8 = 0;
+        let mut aces:u8 = 0;
+        for card in self.cards.iter() {
+            total += card.rank.value();
+            if card.rank == Rank::Ace {
+                aces += 1;
+            }
+        }
+
+        if total > 21 {
+            while aces > 0 {
+                aces -= 1;
+                total -= 10;
+                if total <= 21  {
+                    break;
+                }
+            }
+        }
+
+        total
     }
 }
 
